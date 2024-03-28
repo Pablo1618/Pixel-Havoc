@@ -1,25 +1,20 @@
 using System.Collections;
 using UnityEngine;
 
-public class FaceMouse : MonoBehaviour
+public class PlayerRotation : MonoBehaviour
 {
     void FixedUpdate()
     {
-        faceMouse();        
+        FaceMouse();
     }
  
-    void faceMouse()
+    void FaceMouse()
     {
         Vector3 mousePosition = Input.mousePosition;
         mousePosition = Camera.main.ScreenToWorldPoint(mousePosition);
- 
-        Vector2 direction = new Vector2(
-            mousePosition.x - transform.position.x,
-            mousePosition.y - transform.position.y
-        );
- 
-        direction = Quaternion.Euler(0, 0, 90) * direction; // +90 stopni
- 
+
+        Vector2 direction = mousePosition - transform.position;
+
         transform.up = direction;
     }
 }
