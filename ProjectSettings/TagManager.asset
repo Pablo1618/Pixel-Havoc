@@ -44,3 +44,9 @@ TagManager:
   - name: Background
     uniqueID: 3914495645
     locked: 0
+  - name: Buildables
+    uniqueID: 956500611
+    locked: 0
+  - name: UI
+    uniqueID: 4281393349
+    locked: 0

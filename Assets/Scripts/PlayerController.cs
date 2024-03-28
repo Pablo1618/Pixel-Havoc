@@ -5,7 +5,9 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     public float movementSpeed;
+    public float smoothness = 0.5f; // Dodajemy nową zmienną do określenia płynności ruchu
     float speedX, speedY;
+    Vector2 currentVelocity;
     Rigidbody2D rb;
 
     // Start is called before the first frame update
@@ -15,10 +17,12 @@ public class PlayerController : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         speedX = Input.GetAxisRaw("Horizontal") * movementSpeed;
         speedY = Input.GetAxisRaw("Vertical") * movementSpeed;
-        rb.velocity = new Vector2(speedX,speedY);
+        Vector2 targetVelocity = new Vector2(speedX, speedY);
+        // Używamy Vector2.SmoothDamp do płynnej zmiany prędkości
+        rb.velocity = Vector2.SmoothDamp(rb.velocity, targetVelocity, ref currentVelocity, smoothness);
     }
 }
