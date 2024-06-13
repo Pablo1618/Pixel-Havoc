@@ -91,6 +91,17 @@ public class ClientData
             writer.WriteAsync(lobbyPlayers);
         }
 
+        public void writeStart()
+        {
+            StreamWriter writer = new StreamWriter(socket.GetStream(),
+           Encoding.ASCII);
+            writer.AutoFlush = true;
+
+            string message = "Start";
+
+            writer.WriteAsync(message);
+        }
+
         private void receiveData(IAsyncResult result)
         {
             try

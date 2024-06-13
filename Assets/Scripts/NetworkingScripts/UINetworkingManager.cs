@@ -114,4 +114,9 @@ public class UINetworkingManager : MonoBehaviour
         updateLobby();
     
     }
+
+    public void startGame()
+    {
+        GameServer.instance.writeStartGameToAllPlayers();
+    }
 }

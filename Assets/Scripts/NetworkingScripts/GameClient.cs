@@ -7,6 +7,7 @@ using System;
 using System.IO;
 using System.Text;
 using System.Threading;
+using UnityEngine.SceneManagement;
 
 public class GameClient : MonoBehaviour
 {
@@ -21,6 +22,7 @@ public class GameClient : MonoBehaviour
     public static string clientName = "Player";
 
     public static string lobby = "Lobby: placeholder";
+    public static bool gameStarted = false;
 
     public string getLobby()
     {
@@ -88,9 +90,15 @@ public class GameClient : MonoBehaviour
                             Debug.Log("[GameClient] sent name");
                             break;
 
+                        case "Start":
+                            Debug.Log($"Start {id}");
+                            gameStarted = true; // zmiana sceny po otrzymaniu Start
+                            break;
+
                         default:
                             if(dataReceived.StartsWith("Lobby:"))
                             {
+
                                 lobby = dataReceived;
 
                                 UINetworkingManager.instance.setNewLobbyString(lobby);
@@ -145,5 +153,9 @@ public class GameClient : MonoBehaviour
         tcp.connect();
     }
 
- 
+    public void FixedUpdate()
+    {
+        if(gameStarted)
+            SceneManager.LoadScene("Game"); //g³upie obejœcie w¹tków w unity
+    }
 }

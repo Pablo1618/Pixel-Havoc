@@ -73,4 +73,12 @@ public class GameServer : MonoBehaviour
             client.Value.tcp.writeLobbyDataToPlayers();
         }
     }
+
+    public void writeStartGameToAllPlayers()
+    {
+        foreach (KeyValuePair<int, ClientData> client in clients)
+        {
+            client.Value.tcp.writeStart();
+        }
+    }
 }
