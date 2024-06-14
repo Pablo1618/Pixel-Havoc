@@ -6,12 +6,14 @@ public class PlayerController : MonoBehaviour
 {
     [SerializeField] float movementSpeed;
     [SerializeField] float smoothness = 0.5f; // Dodajemy nową zmienną do określenia płynności ruchu
+    [SerializeField] GameObject[] respawnPoints;
     private Vector2 currentVelocity;
     private Rigidbody2D rb;
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        rb.transform.position = respawnPoints[GameClient.id%respawnPoints.Length].transform.position;
     }
 
     void FixedUpdate()
