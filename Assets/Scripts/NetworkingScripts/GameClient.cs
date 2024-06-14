@@ -102,7 +102,13 @@ public class GameClient : MonoBehaviour
                                 lobby = dataReceived;
 
                                 UINetworkingManager.instance.setNewLobbyString(lobby);
-                              
+                                
+                            }
+
+                            else if(dataReceived.StartsWith("ID:"))
+                            {
+                                id = int.Parse(dataReceived.Split(" ")[1]);
+                                Debug.Log($"My ID is: {id}");
                             }
 
                             break;

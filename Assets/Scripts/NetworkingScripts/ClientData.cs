@@ -102,6 +102,16 @@ public class ClientData
             writer.WriteAsync(message);
         }
 
+
+        public void writeClientID()
+        {
+            StreamWriter writer = new StreamWriter(socket.GetStream(),
+           Encoding.ASCII);
+            writer.AutoFlush = true;
+
+            writer.WriteAsync($"ID: {id}");
+        }
+
         private void receiveData(IAsyncResult result)
         {
             try
@@ -116,6 +126,8 @@ public class ClientData
                     {
                         dataReceived = dataReceived.Split(" ")[1];
                         clientData.clientName = dataReceived;
+
+                        writeClientID();
 
                         parentGameServer.writeLobbyDataToAllPlayers();
                        // writer.Close();
