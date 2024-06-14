@@ -16,6 +16,13 @@ public class PlayerController : MonoBehaviour
         rb.transform.position = respawnPoints[GameClient.id%respawnPoints.Length].transform.position;
     }
 
+    void respawn()
+    {
+        rb.velocity = Vector2.zero;
+        int randomPoint = Random.Range(0, respawnPoints.Length);
+        rb.transform.position = respawnPoints[randomPoint].transform.position;
+    }
+
     void FixedUpdate()
     {
         float speedX = Input.GetAxisRaw("Horizontal") * movementSpeed;
