@@ -81,19 +81,20 @@ public class GameClient : MonoBehaviour
                     switch(dataReceived)
                     {
                         case "clientDataReady":
-                            StreamWriter writer = new StreamWriter(stream,
-          Encoding.ASCII);
+                            StreamWriter writer = new StreamWriter(stream, Encoding.ASCII);
                             writer.AutoFlush = true;
                             writer.WriteAsync("Name: " + clientName);
                             // writer.Close();
 
                             Debug.Log("[GameClient] sent name");
                             break;
-
                         case "Start":
                             Debug.Log($"Start {id}");
                             gameStarted = true; // zmiana sceny po otrzymaniu Start
+                            UDPClient.SetupClient();
+
                             break;
+
 
                         default:
                             if(dataReceived.StartsWith("Lobby:"))

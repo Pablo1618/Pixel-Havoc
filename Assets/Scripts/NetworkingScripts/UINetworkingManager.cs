@@ -118,5 +118,6 @@ public class UINetworkingManager : MonoBehaviour
     public void startGame()
     {
         GameServer.instance.writeStartGameToAllPlayers();
+        UDPServer.StartServer();
     }
 }

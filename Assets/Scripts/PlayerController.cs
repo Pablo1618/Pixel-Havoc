@@ -1,6 +1,11 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEditor;
+using System.Net;
+using Unity.VisualScripting;
+using System.Linq;
 
 public class PlayerController : MonoBehaviour
 {
@@ -19,7 +24,7 @@ public class PlayerController : MonoBehaviour
     void respawn()
     {
         rb.velocity = Vector2.zero;
-        int randomPoint = Random.Range(0, respawnPoints.Length);
+        int randomPoint = UnityEngine.Random.Range(0, respawnPoints.Length);
         rb.transform.position = respawnPoints[randomPoint].transform.position;
     }
 

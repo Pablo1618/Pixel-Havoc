@@ -1,9 +1,11 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Security.Cryptography;
 using UnityEngine;
 
-public struct PlayerPos
+[Serializable]
+public class PlayerPos
 {
     public float x;
     public float y;
@@ -46,3 +48,4 @@ public class PlayerInfo : MonoBehaviour
         pos.rotation = rb.transform.rotation.z;
     }
 }
+
