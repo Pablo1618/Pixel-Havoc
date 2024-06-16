@@ -77,6 +77,7 @@ public class ClientData
 
         public void writeLobbyDataToPlayers()
         {
+            lock()
             StreamWriter writer = new StreamWriter(socket.GetStream(),
            Encoding.ASCII);
             writer.AutoFlush = true;
