@@ -168,4 +168,9 @@ public class GameClient : MonoBehaviour
         if(gameStarted)
             SceneManager.LoadScene("Game"); //g³upie obejœcie w¹tków w unity
     }
+
+    public void OnApplicationQuit()
+    {
+        tcp.socket.Close();
+    }
 }

@@ -2634,7 +2634,7 @@ MonoBehaviour:
   lobbyPanel: {fileID: 1049520199}
   playerList: {fileID: 56693027}
   playerLabelPrefab: {fileID: 6027883009051179056, guid: 3fbf9406bb1bed24cb9553a7d1ed8cc8, type: 3}
-  startGameButton: {fileID: 0}
+  startGameButton: {fileID: 1235387046}
   lobby: 'Lobby:'
 --- !u!1660057539 &9223372036854775807
 SceneRoots:

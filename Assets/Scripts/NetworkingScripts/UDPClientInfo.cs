@@ -13,11 +13,13 @@ public class UDPClientInfo
     {
         this.id = id;
         this.clientIP = clientIP;
+        playerInfo = new PlayerPos();
     }
 
     public UDPClientInfo(int id) 
     {
         this.id = id;
+        playerInfo = new PlayerPos();
     }
 
     public IPEndPoint clientIP;

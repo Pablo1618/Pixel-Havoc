@@ -17,6 +17,7 @@ public class ClientData
     public static GameServer parentGameServer;
     public string clientName;
 
+
     public ClientData(int id, GameServer _parentGameServer)
     {
         clientID = id;
@@ -76,6 +77,7 @@ public class ClientData
 
         public void writeLobbyDataToPlayers()
         {
+            lock()
             StreamWriter writer = new StreamWriter(socket.GetStream(),
            Encoding.ASCII);
             writer.AutoFlush = true;

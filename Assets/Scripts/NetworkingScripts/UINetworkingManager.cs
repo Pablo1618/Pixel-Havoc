@@ -19,6 +19,7 @@ public class UINetworkingManager : MonoBehaviour
     public GameObject playerList;
     public GameObject playerLabelPrefab;
 
+    [SerializeField]
     public UnityEngine.UI.Button startGameButton;
 
     public string lobby = "Lobby:";

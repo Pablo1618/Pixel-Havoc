@@ -14,11 +14,13 @@ public class PlayerController : MonoBehaviour
     [SerializeField] GameObject[] respawnPoints;
     private Vector2 currentVelocity;
     private Rigidbody2D rb;
+    public static UDPClientInfo clientInfo;
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         rb.transform.position = respawnPoints[GameClient.id%respawnPoints.Length].transform.position;
+        clientInfo = new UDPClientInfo(GameClient.id);
     }
 
     void respawn()
@@ -35,5 +37,8 @@ public class PlayerController : MonoBehaviour
         Vector2 targetVelocity = new Vector2(speedX, speedY);
         // Używamy Vector2.SmoothDamp do płynnej zmiany prędkości
         rb.velocity = Vector2.SmoothDamp(rb.velocity, targetVelocity, ref currentVelocity, smoothness);
+        clientInfo.playerInfo.x = rb.transform.position.x;
+        clientInfo.playerInfo.y = rb.transform.position.y;
+        clientInfo.playerInfo.rotation = rb.transform.rotation.z;
     }
 }

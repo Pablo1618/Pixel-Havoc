@@ -81,4 +81,9 @@ public class GameServer : MonoBehaviour
             client.Value.tcp.writeStart();
         }
     }
+
+    public void OnApplicationQuit()
+    {
+        tcpListener.Stop();
+    }
 }

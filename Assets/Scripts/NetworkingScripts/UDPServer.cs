@@ -12,10 +12,11 @@ public class UDPServer : MonoBehaviour
     public static List<UDPClientInfo> clientsInfo = new List<UDPClientInfo>();
     public static UdpClient server;
     public static bool isStarted = false;
+    private int delay = 100, counter = 0;
 
     public static void StartServer()
     {
-        int port = 2137;
+        int port = 5000;
         server = new UdpClient(port);
         Debug.Log($"Server started on port: {port}");
 
@@ -29,11 +30,16 @@ public class UDPServer : MonoBehaviour
 
     public void FixedUpdate()
     {
-        if(!isStarted)
+        counter++;
+        if (counter % delay == 0)
         {
-            return;
+            counter = 0;
+            if (!isStarted)
+            {
+                return;
+            }
+            UpdateAllClients();
         }
-        UpdateAllClients();
     }
 
     public static void Listen()
@@ -42,19 +48,24 @@ public class UDPServer : MonoBehaviour
         {
             try
             {
+                Debug.Log("Server reading...");
                 IPEndPoint clientIP = null; 
                 byte[] data = server.Receive(ref clientIP);
                 string message = Encoding.ASCII.GetString(data);
-                
-                if(message.StartsWith("MyIP:"))
+                Debug.Log($"Server read: {message}");
+                if(message.StartsWith("MyID:"))
                 {
                     int clientID = int.Parse(message.Split(':')[1]);
                     clientsInfo.Add(new UDPClientInfo(clientID, clientIP));
+                    Debug.Log("Added user!");
                 }
                 else if(message.StartsWith("Data:"))
                 {
-                    UDPClientInfo clientInfo = JsonUtility.FromJson<UDPClientInfo>(message.Split(':')[1]);
+                    Debug.Log("Updating user...");
+                    UDPClientInfo clientInfo = JsonUtility.FromJson<UDPClientInfo>(message.Substring("Data:".Length));
                     clientsInfo.Find(info => info.id == clientInfo.id).Update(clientInfo);
+                    UDPClientInfo user = clientsInfo.Find(info => info.id == clientInfo.id);
+                    Debug.Log($"Updated user:{user.id} X:{user.playerInfo.x} Y:{user.playerInfo.y}");
                 }
             }
             catch (SocketException e)
@@ -72,5 +83,10 @@ public class UDPServer : MonoBehaviour
         {
             server.Send(clientsInfoToBytes, clientsInfoToBytes.Length, clientInfo.clientIP);
         }
+    }
+
+    public void OnApplicationQuit()
+    {
+        server.Close();
     }
 }
