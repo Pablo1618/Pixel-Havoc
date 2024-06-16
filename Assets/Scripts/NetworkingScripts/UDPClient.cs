@@ -5,13 +5,13 @@ using System.Net.Sockets;
 using System.Net;
 using System.Text;
 using UnityEngine;
-using TreeEditor;
 
 public class UDPClient : MonoBehaviour
 {
     static string serverIp = "127.0.0.1";
-    static int port = 5000;
+    static int port = 2137;
     static UdpClient client;
+    //private int delay = 10, counter = 0;
     public static void SetupClient()
     {
         client = new UdpClient();
@@ -21,13 +21,18 @@ public class UDPClient : MonoBehaviour
 
     public void FixedUpdate()
     {
-        if(!UDPServer.isStarted)
-        {
-            return;
-        }
+        //counter++;
+        //if (counter % delay == 0) //doda³em tymczasowo na czas debugowania, ale nawet siê nie przyda³o...
+        //{
+            //counter = 0;
+            if (!UDPServer.isStarted)
+            {
+                return;
+            }
 
-        SendPlayerInfo();
-        ReceivePlayersInfo();
+            SendPlayerInfo();
+            ReceivePlayersInfo();
+        //}
     }
 
     public static void SendPlayerInfo()
@@ -42,6 +47,7 @@ public class UDPClient : MonoBehaviour
     {
         string otherPlayersJsonInfo = Receive();
         UDPClientInfoArray playersInfo = JsonUtility.FromJson<UDPClientInfoArray>(otherPlayersJsonInfo);
+        Debug.Log($"[{GameClient.id}] Received: {playersInfo}");
         // todo: update other players
     }
 

@@ -118,6 +118,6 @@ public class UINetworkingManager : MonoBehaviour
     public void startGame()
     {
         GameServer.instance.writeStartGameToAllPlayers();
-        UDPServer.StartServer();
+        UDPServer.StartServer(); //imo powinno byæ w Start() w tej klasie, by siê aktywowa³ serwer przy za³adowaniu sceny
     }
 }

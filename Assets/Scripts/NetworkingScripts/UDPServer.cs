@@ -6,19 +6,18 @@ using System.Net;
 using System.Text;
 using UnityEngine;
 using System.Threading;
-using UnityEditor.PackageManager;
-using UnityEditor.VersionControl;
 
 public class UDPServer : MonoBehaviour
 {
     public static List<UDPClientInfo> clientsInfo = new List<UDPClientInfo>();
     public static UdpClient server;
     public static bool isStarted = false;
+
     public static void StartServer()
     {
-        int port = 5000;
+        int port = 2137;
         server = new UdpClient(port);
-        Console.WriteLine("Server started on port: {0}", port);
+        Debug.Log($"Server started on port: {port}");
 
         Thread readThread = new Thread(() =>
         {

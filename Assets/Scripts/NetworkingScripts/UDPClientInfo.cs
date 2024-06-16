@@ -33,7 +33,7 @@ public class UDPClientInfo
     }
 }
 
-// HACK - unity does not support serialising arrays -_-
+// HACK - unity does not support serializing arrays -_-
 public class UDPClientInfoArray
 {
     public UDPClientInfo[] clientsInfo;
