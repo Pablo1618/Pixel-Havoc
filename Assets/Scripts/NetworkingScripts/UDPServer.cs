@@ -74,6 +74,7 @@ public class UDPServer : MonoBehaviour
         foreach (var clientInfo in clientsInfo)
         {
             server.Send(clientsInfoToBytes, clientsInfoToBytes.Length, clientInfo.clientIP);
+            Debug.Log($"[SERVER] sent to {clientInfo.id}");
         }
     }
 

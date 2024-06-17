@@ -39,6 +39,6 @@ public class PlayerController : MonoBehaviour
         rb.velocity = Vector2.SmoothDamp(rb.velocity, targetVelocity, ref currentVelocity, smoothness);
         clientInfo.playerInfo.x = rb.transform.position.x;
         clientInfo.playerInfo.y = rb.transform.position.y;
-        clientInfo.playerInfo.rotation = rb.transform.rotation.z;
+        clientInfo.playerInfo.rotation = rb.transform.eulerAngles.z;
     }
 }
