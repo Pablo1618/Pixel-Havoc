@@ -84,6 +84,7 @@ public class GameServer : MonoBehaviour
 
     public void OnApplicationQuit()
     {
-        tcpListener.Stop();
+        if(tcpListener != null)
+            tcpListener.Stop();
     }
 }

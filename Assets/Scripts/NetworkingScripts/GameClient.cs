@@ -98,21 +98,23 @@ public class GameClient : MonoBehaviour
 
 
                         default:
-                            if(dataReceived.StartsWith("Lobby:"))
+                            foreach (var data in dataReceived.Split('\n'))
                             {
+                                if (data.StartsWith("Lobby:"))
+                                {
 
-                                lobby = dataReceived;
+                                    lobby = data;
 
-                                UINetworkingManager.instance.setNewLobbyString(lobby);
-                                
+                                    UINetworkingManager.instance.setNewLobbyString(lobby);
+
+                                }
+
+                                else if (data.StartsWith("ID:"))
+                                {
+                                    id = int.Parse(data.Split(" ")[1]);
+                                    Debug.Log($"My ID is: {id}");
+                                }
                             }
-
-                            else if(dataReceived.StartsWith("ID:"))
-                            {
-                                id = int.Parse(dataReceived.Split(" ")[1]);
-                                Debug.Log($"My ID is: {id}");
-                            }
-
                             break;
                     }
                    
@@ -171,6 +173,7 @@ public class GameClient : MonoBehaviour
 
     public void OnApplicationQuit()
     {
-        tcp.socket.Close();
+        if(tcp != null)
+            tcp.socket.Close();
     }
 }

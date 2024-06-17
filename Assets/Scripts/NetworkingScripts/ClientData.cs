@@ -77,7 +77,6 @@ public class ClientData
 
         public void writeLobbyDataToPlayers()
         {
-            lock()
             StreamWriter writer = new StreamWriter(socket.GetStream(),
            Encoding.ASCII);
             writer.AutoFlush = true;
@@ -89,6 +88,7 @@ public class ClientData
             {
                 lobbyPlayers += client.Value.getClientName() + " ";
             }
+            lobbyPlayers += '\n';
             Debug.Log(lobbyPlayers);
             writer.WriteAsync(lobbyPlayers);
         }
@@ -111,7 +111,7 @@ public class ClientData
            Encoding.ASCII);
             writer.AutoFlush = true;
 
-            writer.WriteAsync($"ID: {id}");
+            writer.WriteAsync($"ID: {id}\n");
         }
 
         private void receiveData(IAsyncResult result)

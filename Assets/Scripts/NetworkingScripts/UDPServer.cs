@@ -87,6 +87,7 @@ public class UDPServer : MonoBehaviour
 
     public void OnApplicationQuit()
     {
-        server.Close();
+        if(server!= null)
+            server.Close();
     }
 }
