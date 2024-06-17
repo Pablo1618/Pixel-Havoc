@@ -13,15 +13,13 @@ public class UDPClient : MonoBehaviour
     static string serverIp = "127.0.0.1";
     static int port = 5000;
     static UdpClient client;
-    private int delay = 50, counter = 0;
-    public static bool shouldReceive = false;
 
     public static void SetupClient()
     {
         client = new UdpClient();
         string welcomeString = $"MyID: {GameClient.id}";
         Send(welcomeString);
-        Debug.Log("Sent welcome!");
+        Debug.Log($"[Client {GameClient.id}]: Sent welcome!");
         Thread readThread = new Thread(() =>
         {
             ReceivePlayersInfo();
@@ -30,25 +28,13 @@ public class UDPClient : MonoBehaviour
 
     public void FixedUpdate()
     {
-        counter++;
-        if (counter % delay == 0)
-        {
-            counter = 0;
-            if (!UDPServer.isStarted)
-            {
-                return;
-            }
-            shouldReceive = true;
-            SendPlayerInfo();
-            Debug.Log($"Client sent and received a message!");
-        }
+        SendPlayerInfo();
     }
 
     public static void SendPlayerInfo()
     {
-        Debug.Log($"Client {GameClient.id} sending...");
         string message = "Data:" + JsonUtility.ToJson(PlayerController.clientInfo);
-        Debug.Log($"Client sent: {message}");
+        Debug.Log($"[Client {GameClient.id}]: sent: {message}");
         Send(message);
     }
 
@@ -56,14 +42,22 @@ public class UDPClient : MonoBehaviour
     {
         while (true)
         {
-            if (shouldReceive)
-            {
-                string otherPlayersJsonInfo = Receive();
-                UDPClientInfoArray playersInfo = JsonUtility.FromJson<UDPClientInfoArray>(otherPlayersJsonInfo);
-                Debug.Log($"[{GameClient.id}] Received: {otherPlayersJsonInfo}");
+            //if (shouldReceive)
+            //{
+            //try
+            //{
+            Debug.Log($"[Client {GameClient.id}]: Trying to receive.");
+            string otherPlayersJsonInfo = Receive();
+            UDPClientInfoArray playersInfo = JsonUtility.FromJson<UDPClientInfoArray>(otherPlayersJsonInfo);
+            Debug.Log($"[Client {GameClient.id}]: Received: {otherPlayersJsonInfo}");
+            //}
+            //catch (Exception e)
+            //{
+            //    Debug.Log($"[Client {GameClient.id}]: error: {e.Message}");
+            //}
                 // todo: update other players
-                shouldReceive = false;
-            }
+                //shouldReceive = false;
+            //}
         }
     }
 

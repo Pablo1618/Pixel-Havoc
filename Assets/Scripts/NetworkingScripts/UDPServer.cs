@@ -12,7 +12,6 @@ public class UDPServer : MonoBehaviour
     public static List<UDPClientInfo> clientsInfo = new List<UDPClientInfo>();
     public static UdpClient server;
     public static bool isStarted = false;
-    private int delay = 100, counter = 0;
 
     public static void StartServer()
     {
@@ -30,16 +29,11 @@ public class UDPServer : MonoBehaviour
 
     public void FixedUpdate()
     {
-        counter++;
-        if (counter % delay == 0)
+        if (!isStarted)
         {
-            counter = 0;
-            if (!isStarted)
-            {
-                return;
-            }
-            UpdateAllClients();
+            return;
         }
+        UpdateAllClients();
     }
 
     public static void Listen()
@@ -48,7 +42,6 @@ public class UDPServer : MonoBehaviour
         {
             try
             {
-                Debug.Log("Server reading...");
                 IPEndPoint clientIP = null; 
                 byte[] data = server.Receive(ref clientIP);
                 string message = Encoding.ASCII.GetString(data);
@@ -61,7 +54,6 @@ public class UDPServer : MonoBehaviour
                 }
                 else if(message.StartsWith("Data:"))
                 {
-                    Debug.Log("Updating user...");
                     UDPClientInfo clientInfo = JsonUtility.FromJson<UDPClientInfo>(message.Substring("Data:".Length));
                     clientsInfo.Find(info => info.id == clientInfo.id).Update(clientInfo);
                     UDPClientInfo user = clientsInfo.Find(info => info.id == clientInfo.id);
@@ -70,7 +62,7 @@ public class UDPServer : MonoBehaviour
             }
             catch (SocketException e)
             {
-                Console.WriteLine("Server error: {0}", e.Message);
+                Debug.Log($"Server error: {e.Message}");
             }
         }
     }
