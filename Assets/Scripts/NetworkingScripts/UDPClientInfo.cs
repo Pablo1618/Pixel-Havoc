@@ -27,6 +27,17 @@ public class UDPClientInfo
     public int id;
     [SerializeField]
     public PlayerPos playerInfo;
+    private int kills = 0;
+    private int deaths = 0;
+    public void addKill()
+    {
+        kills += 1;
+    }
+
+    public void addDeaths()
+    {
+        deaths += 1;
+    }
 
     public void Update(UDPClientInfo newInfo)
     {

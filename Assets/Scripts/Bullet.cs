@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Bullet : MonoBehaviour
@@ -24,6 +25,10 @@ public class Bullet : MonoBehaviour
         RaycastHit2D hit = Physics2D.Raycast(transform.position, transform.up, Time.deltaTime * speed, collisionMask);
         if (hit.collider)
         {
+            if(hit.collider.gameObject.layer == 6)
+            {
+                UDPClient.SendKillMessage(hit.collider.gameObject.GetComponent<EnemyInfo>().EnemyID);
+            }
             // Tworzymy efekt cząsteczkowy uderzenia na pozycji kolizji
             if (impactParticlePrefab)
             {

@@ -194,5 +194,5 @@ MonoBehaviour:
   graphics: {fileID: 1081564600439422800}
   collisionMask:
     serializedVersion: 2
-    m_Bits: 1
+    m_Bits: 65
   invisibleRange: 0.5

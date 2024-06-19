@@ -9,6 +9,7 @@ using System.Threading;
 using Unity.VisualScripting;
 using System.Linq;
 using UnityEngine.UIElements;
+using UnityEditor;
 
 public class UDPClient : MonoBehaviour
 {
@@ -53,6 +54,13 @@ public class UDPClient : MonoBehaviour
         Send(message);
     }
 
+    public static void SendKillMessage(int whoGotRekt)
+    {
+        string message = $"Kill:{GameClient.id}:{whoGotRekt}";
+        Debug.Log($"{GameClient.id} GOT A NICE HEADSHOT!");
+        Send(message);
+    }
+
     public static void UpdatePlayersInfo(UDPClientInfoArray players) 
     {
         Debug.Log("UPDATING PLAYER POSITIONS!");
@@ -62,33 +70,22 @@ public class UDPClient : MonoBehaviour
 
             for (int i = 0; i < players.clientsInfo.Length; i++)
             {
-                if (i == GameClient.id)
-                    continue; //skipping myself
-                int enemyID = i;
-                if (i >= GameClient.id)
-                    enemyID -= 1;// if we're past myself, decrement enemyID (eg. I'm 2, enemy is 3, enemy has to go on idx 2)
                 Vector3 position = new Vector3(players.clientsInfo[i].playerInfo.x, players.clientsInfo[i].playerInfo.y, 0); //enemy spawn coordinates
                 Quaternion spawnRotation = Quaternion.Euler(0, 0, players.clientsInfo[i].playerInfo.rotation);//enemy rotation
                 GameObject newEnemy = GameObject.Instantiate(instance.enemy, position, spawnRotation);//spawn enemy
-                newEnemies[enemyID] = newEnemy;
+                newEnemy.GetComponent<EnemyInfo>().EnemyID = players.clientsInfo[i].id;
+                if (i == GameClient.id)
+                    newEnemy.SetActive(false);
+                newEnemies[i] = newEnemy;
             }
             enemies = newEnemies;
         }
         else
         {
-            for (int i = 0; i < enemies.Length-1; i++)
+            for (int i = 0; i < enemies.Length; i++)
             {
-                int playerIndex = i;
-                if (i >= GameClient.id)
-                    playerIndex += 1;
-                if (enemies[i] == null)
-                    Debug.Log($"enemies[playerIndex({i})] null");
-                if (players == null)
-                    Debug.Log("players null");
-                if (players.clientsInfo[playerIndex] == null)
-                    Debug.Log($"players.clientsInfo[playerIndex({playerIndex})] null");
-                enemies[i].transform.position = new Vector3(players.clientsInfo[playerIndex].playerInfo.x, players.clientsInfo[playerIndex].playerInfo.y, 0);//move player
-                enemies[i].transform.rotation = Quaternion.Euler(0, 0, players.clientsInfo[playerIndex].playerInfo.rotation);//rotate player
+                enemies[i].transform.position = new Vector3(players.clientsInfo[i].playerInfo.x, players.clientsInfo[i].playerInfo.y, 0);//move player
+                enemies[i].transform.rotation = Quaternion.Euler(0, 0, players.clientsInfo[i].playerInfo.rotation);//rotate player
             }
         }
     }
@@ -97,10 +94,18 @@ public class UDPClient : MonoBehaviour
     {
         while (true)
         {
-            string otherPlayersJsonInfo = Receive();
-            UDPClientInfoArray playersInfo = JsonUtility.FromJson<UDPClientInfoArray>(otherPlayersJsonInfo);
-            Debug.Log($"[Client {GameClient.id}]: Received: {otherPlayersJsonInfo}");
-            playerPositions = playersInfo;
+            string message = Receive();
+            Debug.Log($"{GameClient.id} RECEIVED: {message}");
+            if (message == "Respawn!")
+            {
+                PlayerController.instance.shouldRespawn = true;
+            }
+            else
+            {
+                UDPClientInfoArray playersInfo = JsonUtility.FromJson<UDPClientInfoArray>(message);
+                Debug.Log($"[Client {GameClient.id}]: Received: {message}");
+                playerPositions = playersInfo;
+            }
         }
     }
 

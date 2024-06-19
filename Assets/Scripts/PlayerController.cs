@@ -15,19 +15,23 @@ public class PlayerController : MonoBehaviour
     private Vector2 currentVelocity;
     private Rigidbody2D rb;
     public static UDPClientInfo clientInfo;
+    public static PlayerController instance;
+    public bool shouldRespawn = false;
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         rb.transform.position = respawnPoints[GameClient.id%respawnPoints.Length].transform.position;
         clientInfo = new UDPClientInfo(GameClient.id);
+        instance = this;
     }
 
-    void respawn()
+    public void Respawn()
     {
         rb.velocity = Vector2.zero;
         int randomPoint = UnityEngine.Random.Range(0, respawnPoints.Length);
         rb.transform.position = respawnPoints[randomPoint].transform.position;
+        shouldRespawn = false;
     }
 
     void FixedUpdate()
@@ -40,5 +44,7 @@ public class PlayerController : MonoBehaviour
         clientInfo.playerInfo.x = rb.transform.position.x;
         clientInfo.playerInfo.y = rb.transform.position.y;
         clientInfo.playerInfo.rotation = rb.transform.eulerAngles.z;
+        if (shouldRespawn)
+            Respawn();
     }
 }

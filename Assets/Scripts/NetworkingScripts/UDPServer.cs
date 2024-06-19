@@ -59,6 +59,17 @@ public class UDPServer : MonoBehaviour
                     UDPClientInfo user = clientsInfo.Find(info => info.id == clientInfo.id);
                     Debug.Log($"Updated user:{user.id} X:{user.playerInfo.x} Y:{user.playerInfo.y}");
                 }
+                else if(message.StartsWith("Kill"))
+                {
+                    string[] message_split = message.Split(':');
+                    int killer = int.Parse(message_split[1]);
+                    int noob = int.Parse(message_split[2]);
+                    clientsInfo.Find(info => info.id == killer).addKill();
+                    UDPClientInfo loser = clientsInfo.Find(info => info.id == noob);
+                    loser.addDeaths();
+                    byte[] respawn_message = Encoding.ASCII.GetBytes("Respawn!");
+                    server.Send(respawn_message, respawn_message.Length, loser.clientIP);
+                }
             }
             catch (SocketException e)
             {
@@ -74,7 +85,7 @@ public class UDPServer : MonoBehaviour
         foreach (var clientInfo in clientsInfo)
         {
             server.Send(clientsInfoToBytes, clientsInfoToBytes.Length, clientInfo.clientIP);
-            Debug.Log($"[SERVER] sent to {clientInfo.id}");
+            //Debug.Log($"[SERVER] sent to {clientInfo.id}");
         }
     }
 
